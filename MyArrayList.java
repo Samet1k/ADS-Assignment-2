@@ -1,11 +1,11 @@
 import java.util.Iterator;
 
-public class MyArrayList<T> implements MyList<T>{
+public class MyArrayList<T> implements MyList<T> {
     private Object[] array;
     private int size = 0;
     private int capacity = 5;
 
-    public MyArrayList(){
+    public MyArrayList() {
         array = new Object[capacity];
     }
 
@@ -20,10 +20,8 @@ public class MyArrayList<T> implements MyList<T>{
     private void increaseBuffer() {
         capacity = (int) (1.5 * capacity);
         Object[] array2 = new Object[capacity];
-        for (int i = 0; i < size; i++) {
-            array2[i] = array[i];
-        }
-
+        // Copy the original array to the new one
+        System.arraycopy(array, 0, array2, 0, size);  // More efficient way of copying
         array = array2;
     }
 
@@ -37,26 +35,22 @@ public class MyArrayList<T> implements MyList<T>{
         if (size == capacity) {
             increaseBuffer();
         }
+        // Shift elements to the right
         for (int i = size; i > index; i--) {
             array[i] = array[i - 1];
         }
         array[index] = item;
         size++;
-
-        for (int i = 0; i<size; i++) {
-            System.out.print(array[i] + " ");
-        }
-        System.out.println();
     }
 
     @Override
     public void addFirst(T item) {
-        add(0,item);
+        add(0, item);
     }
 
     @Override
     public void addLast(T item) {
-        add(size,item);
+        add(size, item);
     }
 
     @Override
@@ -71,7 +65,7 @@ public class MyArrayList<T> implements MyList<T>{
 
     @Override
     public T getLast() {
-        return (T) array[size-1];
+        return (T) array[size - 1];
     }
 
     @Override
@@ -83,7 +77,6 @@ public class MyArrayList<T> implements MyList<T>{
         size--;
     }
 
-
     @Override
     public void removeFirst() {
         remove(0);
@@ -91,7 +84,7 @@ public class MyArrayList<T> implements MyList<T>{
 
     @Override
     public void removeLast() {
-        remove(size-1);
+        remove(size - 1);
     }
 
     @Override
@@ -101,6 +94,7 @@ public class MyArrayList<T> implements MyList<T>{
                 Comparable<T> first = (Comparable<T>) array[j];
                 T last = (T) array[j + 1];
                 if (first.compareTo(last) > 0) {
+                    // Swap the elements
                     Object temp = array[j];
                     array[j] = array[j + 1];
                     array[j + 1] = temp;
@@ -109,14 +103,12 @@ public class MyArrayList<T> implements MyList<T>{
         }
     }
 
-
     @Override
     public int indexOf(Object object) {
         for (int i = 0; i < size; i++) {
             if (object.equals(array[i])) {
                 return i;
             }
-
         }
         return -1;
     }
@@ -139,9 +131,7 @@ public class MyArrayList<T> implements MyList<T>{
     @Override
     public Object[] toArray() {
         Object[] result = new Object[size];
-        for (int i = 0; i < size; i++) {
-            result[i] = array[i];
-        }
+        System.arraycopy(array, 0, result, 0, size);  // Efficient way to copy elements to a new array
         return result;
     }
 
@@ -158,10 +148,23 @@ public class MyArrayList<T> implements MyList<T>{
         return size;
     }
 
+    // The iterator method is implemented below
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new MyIterator();
     }
 
+    private class MyIterator implements Iterator<T> {
+        private int currentIndex = 0;
 
+        @Override
+        public boolean hasNext() {
+            return currentIndex < size;
+        }
+
+        @Override
+        public T next() {
+            return (T) array[currentIndex++];
+        }
+    }
 }
