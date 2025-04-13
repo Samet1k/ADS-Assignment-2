@@ -1,51 +1,41 @@
 public class MyStack<T> {
-    private MyArrayList<T> arrayList = new MyArrayList<>();
+    private MyArrayList<T> arrayList;  // MyArrayList немесе MyLinkedList
 
-    public boolean arrayEmpty() {
+    public MyStack(boolean useArrayList) {
+        if (useArrayList) {
+            arrayList = new MyArrayList<>();
+        } else {
+            // Егер MyLinkedList қолданғыңыз келсе, оны қосуға болады
+            arrayList = new MyArrayList<>();
+            // linkedList = new MyLinkedList<>();
+        }
+    }
+
+    // Стек бос па екенін тексеру
+    public boolean isEmpty() {
         return arrayList.size() == 0;
     }
 
-    public int arraySize() {
+    // Стек өлшемін қайтару
+    public int size() {
         return arrayList.size();
     }
 
-    public T arrayPush(T newItem) {
-        arrayList.addLast(newItem);
+    // Элементті стекке қосу
+    public T push(T newItem) {
+        arrayList.addLast(newItem);  // MyArrayList немесе MyLinkedList әдісін қолданамыз
         return newItem;
     }
 
-    public T arrayPeek() {
-        return arrayList.getLast();
+    // Стектің жоғарғы элементін көру
+    public T peek() {
+        return arrayList.getLast();  // MyArrayList немесе MyLinkedList әдісін қолданамыз
     }
 
-    public T arrayPop() {
-        T removingItem = arrayPeek();
-        arrayList.removeLast();
-        return removingItem;
-    }
-
-    private MyLinkedList<T> linkedList = new MyLinkedList<>();
-
-    public boolean listEmpty() {
-        return linkedList.size() == 0;
-    }
-
-    public int listSize() {
-        return linkedList.size();
-    }
-
-    public T listPush(T newItem) {
-        linkedList.addLast(newItem);
-        return newItem;
-    }
-
-    public T listPeek() {
-        return linkedList.getLast();
-    }
-
-    public T listPop() {
-        T removingItem = linkedList.getLast();
-        linkedList.removeLast();
+    // Стектің жоғарғы элементін алу және жою
+    public T pop() {
+        T removingItem = peek();  // Жоғарғы элементті аламыз
+        arrayList.removeLast();   // MyArrayList немесе MyLinkedList әдісін қолданамыз
         return removingItem;
     }
 }
